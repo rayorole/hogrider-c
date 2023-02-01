@@ -45,7 +45,6 @@ def nearest_color(color):
 buf = ""
 
 files = os.listdir("frames")
-print(files)
 
 for imgf in files:
     img = Image.open("frames/" + imgf).convert("RGB")
